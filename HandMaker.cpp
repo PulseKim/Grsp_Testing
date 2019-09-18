@@ -9,13 +9,26 @@ HandMaker::HandMaker(const SkeletonPtr& inHand, std::string dir) : mHand(inHand)
 
 void HandMaker::makeHand()
 {
+	this->makeArm();
 	this->makePalm();
 	this->makeFingers();
 	int indicator = currentDirection == 0 ? 1 : -1;
 	int index_thumb = mHand->getIndexOf(mHand->getBodyNode("thumb metacarpal")->getParentJoint()->getDof(0));
-	mHand->setPosition(index_thumb, 30*M_PI/180);
+	mHand->setPosition(index_thumb, 80*M_PI/180);
 	mHand->setPosition(index_thumb+1, indicator* -60*M_PI/180);
 	mHand->setPosition(index_thumb+3, indicator* 20*M_PI/180);
+}
+
+void HandMaker::makeArm()
+{
+	BodyNode* bn;
+	Eigen::Vector3d boxsize(0.01, 0.01, 0.01);
+	double rad = 0.02, height = 0.25;
+	Eigen::Vector3d color = dart::Color::Green();
+	double mass = 0.1;
+	bn = skel.weldBox(mHand, nullptr, "weld", boxsize, Eigen::Vector3d(0,0,-boxsize[2]/2), Eigen::Vector3d(-0.1,0.2,-0.2), 0.001, dart::Color::White());
+	bn = skel.ballCylinder(mHand, bn, "arm", rad, height, Eigen::Vector3d(0,0,-height/2), Eigen::Vector3d(0,0,boxsize[2]/2), mass, dart::Color::Fuchsia());
+	currentParent = bn;
 }
 
 void HandMaker::makePalm()
@@ -25,7 +38,7 @@ void HandMaker::makePalm()
 	palmSize = boxsize;
 	Eigen::Vector3d color = dart::Color::Green();
 	double mass = 0.1;
-	bn = skel.freeBox(mHand, "palm", boxsize, Eigen::Vector3d(0,-0.3,0), mass, color);
+	bn = skel.ballBox(mHand, currentParent, "palm", boxsize, Eigen::Vector3d(0,0,-boxsize[2]/2), Eigen::Vector3d(0,0,0.25/2), mass, color);
 	currentParent = bn;
 }
 
@@ -47,21 +60,29 @@ void HandMaker::makeSingleFinger(int idx)
 	double mass_long = 0.04;
 	double mass_short = 0.02;
 	double epsilon = 1E-10;
-	Eigen::Vector3d patch(0.005, epsilon, 0.005);
+	Eigen::Vector3d patch(0.001, epsilon, 0.001);
 	double offset;
 
 	if(currentDirection == 0)
 		offset = -palmSize[0]/2 + gap*idx + fing_x/2 + fing_x * idx;
 	else if(currentDirection == 1)
 		offset = palmSize[0]/2 -(gap*idx + fing_x/2 + fing_x * idx);
-	Eigen::Vector3d boxsize(fing_x, palmSize[1], fing_len);
-	bn = skel.univBox(mHand, currentParent, "metacarpal"+std::to_string(idx), Eigen::Vector3d::UnitX(), Eigen::Vector3d::UnitY(), boxsize, Eigen::Vector3d(0,0,-boxsize[2]/2), Eigen::Vector3d(offset, 0, palmSize[2]/2), mass_long , color);
-	boxsize[2] = 0.05;
-	bn = skel.revolBox(mHand, bn, "proxphalanx"+std::to_string(idx), Eigen::Vector3d::UnitX(), boxsize, Eigen::Vector3d(0,0,-boxsize[2]/2), Eigen::Vector3d(0,0,fing_len/2), mass_short, color);
+
+	bn = skel.univCylinder(mHand, currentParent, "metacarpal" + std::to_string(idx), Eigen::Vector3d::UnitX(), Eigen::Vector3d::UnitY(), fing_x/2, fing_len, Eigen::Vector3d(0,0,-fing_len/2), Eigen::Vector3d(offset, 0, palmSize[2]/2), mass_long, color);
+	bn = skel.revolCylinder(mHand, bn, "proxphalanx" + std::to_string(idx), Eigen::Vector3d::UnitX(), fing_x/2, 0.05, Eigen::Vector3d(0,0,-0.05/2), Eigen::Vector3d(0,0,fing_len/2), mass_short, color);
 	fing_len = 0.05;
-	boxsize[2] = 0.03;
-	bn = skel.revolBox(mHand, bn, "distphalanx"+std::to_string(idx), Eigen::Vector3d::UnitX(), boxsize, Eigen::Vector3d(0,0,-boxsize[2]/2), Eigen::Vector3d(0,0,fing_len/2), mass_short, color);		
-	bn = skel.weldBox(mHand, bn, "patch" + std::to_string(idx), patch, Eigen::Vector3d(0,0,0), Eigen::Vector3d(0,-boxsize[1]/2, boxsize[2]/2-patch[2]/2), epsilon, dart::Color::Orange());
+	bn = skel.revolCylinder(mHand, bn, "distphalanx" + std::to_string(idx), Eigen::Vector3d::UnitX(), fing_x/2, 0.03-fing_x/2, Eigen::Vector3d(0,0,-(0.03-fing_x/2)/2), Eigen::Vector3d(0,0,fing_len/2), mass_short/3, color); 
+	fing_len = 0.03-fing_x/2;
+	skel.weldBox(mHand, bn, "patch" + std::to_string(idx), patch, Eigen::Vector3d(0,0,0), Eigen::Vector3d(0,-fing_x/2,fing_len/2), epsilon, dart::Color::Orange());
+	skel.weldSphere(mHand, bn, "dummy" + std::to_string(idx), fing_x/2, Eigen::Vector3d(0,0,0), Eigen::Vector3d(0,0,(0.03-fing_x/2)/2), mass_short, color);
+	
+	// Eigen::Vector3d boxsize(fing_x, palmSize[1], fing_len);
+	// bn = skel.univBox(mHand, currentParent, "metacarpal"+std::to_string(idx), Eigen::Vector3d::UnitX(), Eigen::Vector3d::UnitY(), boxsize, Eigen::Vector3d(0,0,-boxsize[2]/2), Eigen::Vector3d(offset, 0, palmSize[2]/2), mass_long , color);
+	// boxsize[2] = 0.05;
+	// bn = skel.revolBox(mHand, bn, "proxphalanx"+std::to_string(idx), Eigen::Vector3d::UnitX(), boxsize, Eigen::Vector3d(0,0,-boxsize[2]/2), Eigen::Vector3d(0,0,fing_len/2), mass_short, color);
+	// fing_len = 0.05;
+	// boxsize[2] = 0.03;
+	// bn = skel.revolBox(mHand, bn, "distphalanx"+std::to_string(idx), Eigen::Vector3d::UnitX(), boxsize, Eigen::Vector3d(0,0,-boxsize[2]/2), Eigen::Vector3d(0,0,fing_len/2), mass_short, color);		
 }
 
 
@@ -75,7 +96,7 @@ void HandMaker::makeThumb()
 	double mass_long = 0.04;
 	double mass_short = 0.02;
 	double epsilon = 1E-10;
-	Eigen::Vector3d patch(epsilon, 0.005, 0.005);
+	Eigen::Vector3d patch(epsilon, 0.001, 0.001);
 	Eigen::Vector3d offset;
 	if(currentDirection == 0)
 		offset = Eigen::Vector3d(-palmSize[0]/2, 0, -palmSize[2]/2);
@@ -83,16 +104,26 @@ void HandMaker::makeThumb()
 		offset = Eigen::Vector3d(palmSize[0]/2, 0, -palmSize[2]/2);
 	Eigen::Vector3d boxsize(palmSize[1], fing_x,  fing_len);
 
-	bn = skel.univBox(mHand, currentParent, "thumb metacarpal", Eigen::Vector3d::UnitX(), Eigen::Vector3d::UnitY(), boxsize, Eigen::Vector3d(0,0,-boxsize[2]/2), offset,mass_long ,color);
+	bn = skel.univCylinder(mHand, currentParent, "thumb metacarpal", Eigen::Vector3d::UnitX(), Eigen::Vector3d::UnitY(), fing_x/2, fing_len, Eigen::Vector3d(0,0,-boxsize[2]/2), offset,mass_long ,color);
 	boxsize[2] = 0.05;
-	bn = skel.univBox(mHand, bn, "thumb proxphalanx", Eigen::Vector3d::UnitX(), Eigen::Vector3d::UnitY(), boxsize, Eigen::Vector3d(0,0,-boxsize[2]/2), Eigen::Vector3d(0,0,fing_len/2),mass_short ,color);	
+	bn = skel.univCylinder(mHand, bn, "thumb proxphalanx", Eigen::Vector3d::UnitX(), Eigen::Vector3d::UnitY(), fing_x/2, boxsize[2], Eigen::Vector3d(0,0,-boxsize[2]/2), Eigen::Vector3d(0,0,fing_len/2),mass_short ,color);	
 	fing_len = 0.05;
-	boxsize[2] = 0.03;
-	bn = skel.revolBox(mHand, bn, "thumb distphalanx", Eigen::Vector3d::UnitY(), boxsize, Eigen::Vector3d(0,0,-boxsize[2]/2), Eigen::Vector3d(0,0,fing_len/2), mass_short, color);		
+	boxsize[2] = 0.03 - fing_x/2;
+	bn = skel.revolCylinder(mHand, bn, "thumb distphalanx", Eigen::Vector3d::UnitY(), fing_x/2, boxsize[2], Eigen::Vector3d(0,0,-boxsize[2]/2), Eigen::Vector3d(0,0,fing_len/2), mass_short, color);		
+	skel.weldSphere(mHand, bn, "thumb dummy", fing_x/2, Eigen::Vector3d(0,0,0), Eigen::Vector3d(0,0,boxsize[2]/2), mass_short, color);
 	if(currentDirection == 0)
-		bn = skel.weldBox(mHand, bn, "thumbpatch", patch, Eigen::Vector3d(0,0,0), Eigen::Vector3d(boxsize[0]/2,0, boxsize[2]/2-patch[2]/2), epsilon, dart::Color::Orange());
+		skel.weldBox(mHand, bn, "thumbpatch", patch, Eigen::Vector3d(0,0,0), Eigen::Vector3d(fing_x/2,0, boxsize[2]/2), epsilon, dart::Color::Orange());
 	else
-		bn = skel.weldBox(mHand, bn, "thumbpatch", patch, Eigen::Vector3d(0,0,0), Eigen::Vector3d(-boxsize[0]/2,0, boxsize[2]/2-patch[2]/2), epsilon, dart::Color::Orange());
+		skel.weldBox(mHand, bn, "thumbpatch", patch, Eigen::Vector3d(0,0,0), Eigen::Vector3d(-fing_x/2,0, boxsize[2]/2), epsilon, dart::Color::Orange());
 
-
+	// bn = skel.univBox(mHand, currentParent, "thumb metacarpal", Eigen::Vector3d::UnitX(), Eigen::Vector3d::UnitY(), boxsize, Eigen::Vector3d(0,0,-boxsize[2]/2), offset,mass_long ,color);
+	// boxsize[2] = 0.05;
+	// bn = skel.univBox(mHand, bn, "thumb proxphalanx", Eigen::Vector3d::UnitX(), Eigen::Vector3d::UnitY(), boxsize, Eigen::Vector3d(0,0,-boxsize[2]/2), Eigen::Vector3d(0,0,fing_len/2),mass_short ,color);	
+	// fing_len = 0.05;
+	// boxsize[2] = 0.03;
+	// bn = skel.revolBox(mHand, bn, "thumb distphalanx", Eigen::Vector3d::UnitY(), boxsize, Eigen::Vector3d(0,0,-boxsize[2]/2), Eigen::Vector3d(0,0,fing_len/2), mass_short, color);		
+	// if(currentDirection == 0)
+	// 	bn = skel.weldBox(mHand, bn, "thumbpatch", patch, Eigen::Vector3d(0,0,0), Eigen::Vector3d(boxsize[0]/2,0, boxsize[2]/2-patch[2]/2), epsilon, dart::Color::Orange());
+	// else
+	// 	bn = skel.weldBox(mHand, bn, "thumbpatch", patch, Eigen::Vector3d(0,0,0), Eigen::Vector3d(-boxsize[0]/2,0, boxsize[2]/2-patch[2]/2), epsilon, dart::Color::Orange());
 }

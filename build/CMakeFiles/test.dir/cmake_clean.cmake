@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/test.dir/Contact.cpp.o"
   "CMakeFiles/test.dir/Controller.cpp.o"
+  "CMakeFiles/test.dir/Grasp.cpp.o"
   "CMakeFiles/test.dir/HandMaker.cpp.o"
   "CMakeFiles/test.dir/IkSolver.cpp.o"
   "CMakeFiles/test.dir/MyWindow.cpp.o"

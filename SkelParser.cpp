@@ -72,6 +72,42 @@ SkelParser::weldBox
 	return bn;
 }
 
+BodyNode* 
+SkelParser::weldSphere
+(const SkeletonPtr& skel, BodyNode* parent, const std::string& name, double radius, 
+	const Eigen::Vector3d offChild, const Eigen::Vector3d offParent, double mass, const Eigen::Vector3d color)
+{
+	//Shape
+	ShapePtr shape = std::shared_ptr<SphereShape>(new SphereShape(radius));
+
+	//Inertia
+	dart::dynamics::Inertia inertia;
+	inertia.setMass(mass);
+	inertia.setMoment(shape->computeInertia(mass));
+
+	//Joint Parsing
+	BodyNode* bn;
+	WeldJoint::Properties props;
+	props.mName = name;
+
+	Eigen::Isometry3d T1;
+	T1.setIdentity();	
+	T1.translation() = offChild;
+	props.mT_ChildBodyToJoint = T1;
+
+	Eigen::Isometry3d T2;
+	T2.setIdentity();
+	T2.translation() = offParent;
+	props.mT_ParentBodyToJoint = T2;
+
+	bn = skel->createJointAndBodyNodePair<WeldJoint>(parent,props,BodyNode::AspectProperties(name)).second;
+	bn->createShapeNodeWith<VisualAspect,CollisionAspect,DynamicsAspect>(shape);
+	auto visualShapenodes = bn->getShapeNodesWith<VisualAspect>();
+	visualShapenodes[0]->getVisualAspect()->setColor(color);
+	bn->setInertia(inertia);	
+	return bn;
+}
+
 BodyNode*
 SkelParser::freeBox
 (const SkeletonPtr& skel, const std::string& name, const Eigen::Vector3d boxsize, const Eigen::Vector3d offChild, double mass, const Eigen::Vector3d color)
@@ -537,6 +573,44 @@ SkelParser::revolEllipsoid
 	props.mName = name;
 	props.mAxis = axis;
 
+
+	Eigen::Isometry3d T1;
+	T1.setIdentity();	
+	T1.translation() = offChild;
+	props.mT_ChildBodyToJoint = T1;
+
+	Eigen::Isometry3d T2;
+	T2.setIdentity();
+	T2.translation() = offParent;
+	props.mT_ParentBodyToJoint = T2;
+
+	bn = skel->createJointAndBodyNodePair<RevoluteJoint>(parent,props,BodyNode::AspectProperties(name)).second;
+	bn->createShapeNodeWith<VisualAspect,CollisionAspect,DynamicsAspect>(shape);
+	auto visualShapenodes = bn->getShapeNodesWith<VisualAspect>();
+	visualShapenodes[0]->getVisualAspect()->setColor(color);
+	bn->setInertia(inertia);	
+	return bn;
+}
+
+BodyNode*
+SkelParser::revolCapsule
+(const SkeletonPtr &skel, BodyNode *parent, const std::string &name, const Eigen::Vector3d axis, 
+	double rad, double height, const Eigen::Vector3d offChild, 
+	const Eigen::Vector3d offParent, double mass, const Eigen::Vector3d color)
+{
+	//Shape
+	ShapePtr shape = std::shared_ptr<CapsuleShape>(new CapsuleShape(rad,height));
+
+	//Inertia
+	dart::dynamics::Inertia inertia;
+	inertia.setMass(mass);
+	inertia.setMoment(shape->computeInertia(mass));
+
+	//Joint Parsing
+	BodyNode* bn;
+	RevoluteJoint::Properties props;
+	props.mName = name;
+	props.mAxis = axis;
 
 	Eigen::Isometry3d T1;
 	T1.setIdentity();	

@@ -83,9 +83,22 @@ CMakeFiles/test.dir/Controller.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/Controller.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mrl/Test/Grasping/Controller.cpp -o CMakeFiles/test.dir/Controller.cpp.s
 
+CMakeFiles/test.dir/Grasp.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/Grasp.cpp.o: ../Grasp.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrl/Test/Grasping/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/test.dir/Grasp.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/Grasp.cpp.o -c /home/mrl/Test/Grasping/Grasp.cpp
+
+CMakeFiles/test.dir/Grasp.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/Grasp.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mrl/Test/Grasping/Grasp.cpp > CMakeFiles/test.dir/Grasp.cpp.i
+
+CMakeFiles/test.dir/Grasp.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/Grasp.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mrl/Test/Grasping/Grasp.cpp -o CMakeFiles/test.dir/Grasp.cpp.s
+
 CMakeFiles/test.dir/HandMaker.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/HandMaker.cpp.o: ../HandMaker.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrl/Test/Grasping/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/test.dir/HandMaker.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrl/Test/Grasping/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/test.dir/HandMaker.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/HandMaker.cpp.o -c /home/mrl/Test/Grasping/HandMaker.cpp
 
 CMakeFiles/test.dir/HandMaker.cpp.i: cmake_force
@@ -98,7 +111,7 @@ CMakeFiles/test.dir/HandMaker.cpp.s: cmake_force
 
 CMakeFiles/test.dir/IkSolver.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/IkSolver.cpp.o: ../IkSolver.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrl/Test/Grasping/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/test.dir/IkSolver.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrl/Test/Grasping/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/test.dir/IkSolver.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/IkSolver.cpp.o -c /home/mrl/Test/Grasping/IkSolver.cpp
 
 CMakeFiles/test.dir/IkSolver.cpp.i: cmake_force
@@ -111,7 +124,7 @@ CMakeFiles/test.dir/IkSolver.cpp.s: cmake_force
 
 CMakeFiles/test.dir/MyWindow.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/MyWindow.cpp.o: ../MyWindow.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrl/Test/Grasping/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/test.dir/MyWindow.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrl/Test/Grasping/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/test.dir/MyWindow.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/MyWindow.cpp.o -c /home/mrl/Test/Grasping/MyWindow.cpp
 
 CMakeFiles/test.dir/MyWindow.cpp.i: cmake_force
@@ -124,7 +137,7 @@ CMakeFiles/test.dir/MyWindow.cpp.s: cmake_force
 
 CMakeFiles/test.dir/SkelParser.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/SkelParser.cpp.o: ../SkelParser.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrl/Test/Grasping/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/test.dir/SkelParser.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrl/Test/Grasping/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/test.dir/SkelParser.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/SkelParser.cpp.o -c /home/mrl/Test/Grasping/SkelParser.cpp
 
 CMakeFiles/test.dir/SkelParser.cpp.i: cmake_force
@@ -137,7 +150,7 @@ CMakeFiles/test.dir/SkelParser.cpp.s: cmake_force
 
 CMakeFiles/test.dir/main.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrl/Test/Grasping/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/test.dir/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrl/Test/Grasping/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/test.dir/main.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/main.cpp.o -c /home/mrl/Test/Grasping/main.cpp
 
 CMakeFiles/test.dir/main.cpp.i: cmake_force
@@ -152,6 +165,7 @@ CMakeFiles/test.dir/main.cpp.s: cmake_force
 test_OBJECTS = \
 "CMakeFiles/test.dir/Contact.cpp.o" \
 "CMakeFiles/test.dir/Controller.cpp.o" \
+"CMakeFiles/test.dir/Grasp.cpp.o" \
 "CMakeFiles/test.dir/HandMaker.cpp.o" \
 "CMakeFiles/test.dir/IkSolver.cpp.o" \
 "CMakeFiles/test.dir/MyWindow.cpp.o" \
@@ -163,6 +177,7 @@ test_EXTERNAL_OBJECTS =
 
 test: CMakeFiles/test.dir/Contact.cpp.o
 test: CMakeFiles/test.dir/Controller.cpp.o
+test: CMakeFiles/test.dir/Grasp.cpp.o
 test: CMakeFiles/test.dir/HandMaker.cpp.o
 test: CMakeFiles/test.dir/IkSolver.cpp.o
 test: CMakeFiles/test.dir/MyWindow.cpp.o
@@ -188,7 +203,7 @@ test: /usr/lib/x86_64-linux-gnu/libBulletSoftBody.so
 test: /usr/local/lib/libdart.so.6.10.0
 test: /usr/local/lib/libdart-external-odelcpsolver.so.6.10.0
 test: /usr/lib/x86_64-linux-gnu/libccd.so
-test: /usr/lib/libfcl.so
+test: /usr/local/lib/libfcl.so
 test: /usr/lib/x86_64-linux-gnu/libassimp.so
 test: /usr/local/lib/libboost_filesystem.so
 test: /usr/local/lib/libboost_system.so
@@ -197,7 +212,7 @@ test: /usr/lib/liboctomath.so
 test: /usr/local/lib/libboost_regex.so
 test: /usr/lib/libipopt.so
 test: CMakeFiles/test.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/mrl/Test/Grasping/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/mrl/Test/Grasping/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable test"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/test.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

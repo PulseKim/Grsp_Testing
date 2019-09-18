@@ -6,6 +6,7 @@
 #include "Controller.h"
 #include "IkSolver.h"
 #include "Contact.h"
+#include "Grasp.h"
 
 using namespace dart::simulation;
 using namespace dart::gui::glut;
@@ -34,6 +35,7 @@ public:
 	void tempCollision();
 	void testing();
 	void drawFrame();
+	void drawNormals();
 	void showDirection(bool flag, Eigen::Vector3d begin, Eigen::Vector3d dir);
 
 protected:

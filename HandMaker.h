@@ -11,6 +11,7 @@ class HandMaker{
 public: 
 	HandMaker(const SkeletonPtr& inHand, std::string dir);	
 	void makeHand();
+	void makeArm();
 	void makePalm();
 	void makeFingers();
 	void makeSingleFinger(int idx);

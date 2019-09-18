@@ -177,6 +177,33 @@ Controller.cpp.s:
 	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/Controller.cpp.s
 .PHONY : Controller.cpp.s
 
+Grasp.o: Grasp.cpp.o
+
+.PHONY : Grasp.o
+
+# target to build an object file
+Grasp.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/Grasp.cpp.o
+.PHONY : Grasp.cpp.o
+
+Grasp.i: Grasp.cpp.i
+
+.PHONY : Grasp.i
+
+# target to preprocess a source file
+Grasp.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/Grasp.cpp.i
+.PHONY : Grasp.cpp.i
+
+Grasp.s: Grasp.cpp.s
+
+.PHONY : Grasp.s
+
+# target to generate assembly for a file
+Grasp.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/Grasp.cpp.s
+.PHONY : Grasp.cpp.s
+
 HandMaker.o: HandMaker.cpp.o
 
 .PHONY : HandMaker.o
@@ -327,6 +354,9 @@ help:
 	@echo "... Controller.o"
 	@echo "... Controller.i"
 	@echo "... Controller.s"
+	@echo "... Grasp.o"
+	@echo "... Grasp.i"
+	@echo "... Grasp.s"
 	@echo "... HandMaker.o"
 	@echo "... HandMaker.i"
 	@echo "... HandMaker.s"

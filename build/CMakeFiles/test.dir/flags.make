@@ -6,5 +6,5 @@ CXX_FLAGS =   -fPIC -std=gnu++11 -Wdeprecated-declarations -DHAVE_CSTDDEF -std=g
 
 CXX_DEFINES = -DBOOST_TEST_DYN_LINK -DHAVE_CSTDDEF -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS
 
-CXX_INCLUDES = -isystem /usr/include/eigen3 -isystem /usr/include/bullet -isystem /usr/include/coin 
+CXX_INCLUDES = -isystem /usr/local/include/eigen3 -isystem /usr/include/bullet -isystem /usr/include/coin 
 

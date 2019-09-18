@@ -20,6 +20,8 @@ public:
 
   BodyNode* weldBox(const SkeletonPtr& skel, const std::string& name, const Eigen::Vector3d boxsize, const Eigen::Vector3d offChild, double mass, const Eigen::Vector3d color);  
   BodyNode* weldBox(const SkeletonPtr& skel, BodyNode* parent, const std::string& name, const Eigen::Vector3d boxsize, const Eigen::Vector3d offChild, const Eigen::Vector3d offParent, double mass, const Eigen::Vector3d color);
+  BodyNode* weldSphere(const SkeletonPtr& skel, BodyNode* parent, const std::string& name, double radius, const Eigen::Vector3d offChild, const Eigen::Vector3d offParent, double mass, const Eigen::Vector3d color);
+
 
   BodyNode* ballBox(const SkeletonPtr& skel, BodyNode* parent, const std::string& name, Eigen::Vector3d boxsize, Eigen::Vector3d offChild, Eigen::Vector3d offParent, double mass, const Eigen::Vector3d color);
   BodyNode* ballCylinder(const SkeletonPtr& skel, BodyNode* parent, const std::string& name, double rad, double height, Eigen::Vector3d offChild, Eigen::Vector3d offParent, double mass, const Eigen::Vector3d color);
@@ -32,6 +34,7 @@ public:
   BodyNode* revolBox(const SkeletonPtr& skel, BodyNode* parent, const std::string& name, const Eigen::Vector3d axis, const Eigen::Vector3d boxsize, const Eigen::Vector3d offChild, const Eigen::Vector3d offParent, double mass, const Eigen::Vector3d color);
   BodyNode* revolCylinder(const SkeletonPtr& skel, BodyNode* parent, const std::string& name, const Eigen::Vector3d axis, double rad, double height, const Eigen::Vector3d offChild, const Eigen::Vector3d offParent, double mass, const Eigen::Vector3d color);
   BodyNode* revolEllipsoid(const SkeletonPtr& skel, BodyNode* parent, const std::string& name, const Eigen::Vector3d axis, const Eigen::Vector3d ellipsoidsize, const Eigen::Vector3d offChild, const Eigen::Vector3d offParent, double mass, const Eigen::Vector3d color);
+  BodyNode* revolCapsule(const SkeletonPtr& skel, BodyNode* parent, const std::string& name, const Eigen::Vector3d axis, double rad, double height, const Eigen::Vector3d offChild, const Eigen::Vector3d offParent, double mass, const Eigen::Vector3d color);
 
 
 };

@@ -7,11 +7,12 @@ Contact::Contact(SkeletonPtr obj, SkeletonPtr hand) : mObject(obj), mHand(hand)
 	valid = true;
 }
 
-void Contact::createNewContact(std::string id, frictionType ft, const Eigen::Vector3d contact_pos)
+void Contact::createNewContact(std::string id, frictionType ft, const Eigen::Vector3d contact_pos, std::string finger)
 {
 	singleContact currentContact;
 	currentContact.cId = id;
 	currentContact.fType = ft;
+	currentContact.contactEndEffector = finger;
 	Eigen::MatrixXd currentWrench;
 	if(ft == FL)
 	{
@@ -20,7 +21,7 @@ void Contact::createNewContact(std::string id, frictionType ft, const Eigen::Vec
 		// freeWrench.resize(6, 1);
 		currentWrench = freeWrench;
 		currentContact.contactForces.resize(1);
-		currentContact.contactForces.setZero();
+		currentContact.contactForces.setOnes();
 	}
 	else if(ft == PC)
 	{
@@ -31,7 +32,7 @@ void Contact::createNewContact(std::string id, frictionType ft, const Eigen::Vec
 		currentWrench = temp;
 		currentWrench.resize(6, 3);
 		currentContact.contactForces.resize(3);	
-		currentContact.contactForces.setZero();
+		currentContact.contactForces.setOnes();
 	}
 	else if(ft == SF)
 	{
@@ -43,13 +44,19 @@ void Contact::createNewContact(std::string id, frictionType ft, const Eigen::Vec
 		currentWrench = temp;
 		currentWrench.resize(6, 4);
 		currentContact.contactForces.resize(4);
-		currentContact.contactForces.setZero();
+		currentContact.contactForces.setOnes();
 	}
 	currentContact.wrenchBasis = currentWrench;
 
 	this->computeRelativeMaps(currentContact, contact_pos);
 	this->computeGraspMap(currentContact);
+	this->computeHandJacobian(currentContact);
 	mContacts.push_back(currentContact);
+}
+
+void Contact::setContactForceMagnitude(singleContact& currentContact, Eigen::VectorXd force)
+{
+	currentContact.contactForces = force;
 }
 
 void Contact::computeRelativeMaps(singleContact& currentContact, const Eigen::Vector3d contact_pos)
@@ -91,10 +98,10 @@ Eigen::Vector3d Contact::getNormalVector(const Eigen::Vector3d contact_pos)
 		double height = cylinder->getHeight();
 
 		//Invalid case
-		if (contact_pos[2] > height/2 || contact_pos[2] < -height/2 || pow(contact_pos[0],2) +pow(contact_pos[1],2) > pow(rad,2))
+		if (contact_pos[2] > height/2 || contact_pos[2] < -height/2 || pow(contact_pos[0],2) +pow(contact_pos[1],2) > pow(rad,2)+ 1E-5)
 		{
 			valid = false;
-			std::cout << "Invalid contact point" << std::endl;
+			std::cout << "Invalid contact point1" << std::endl;
 			std::cout << "Please check the local position of object to contact" << std::endl;
 		}
 		//Top/Bottom case
@@ -106,7 +113,7 @@ Eigen::Vector3d Contact::getNormalVector(const Eigen::Vector3d contact_pos)
 		else if(pow(contact_pos[0],2) +pow(contact_pos[1],2) < pow(rad,2) - 1E-5)
 		{
 			valid = false;
-			std::cout << "Invalid contact point" << std::endl;
+			std::cout << "Invalid contact point2" << std::endl;
 			std::cout << "Please check the local position of object to contact" << std::endl;
 		}
 		//Side case
@@ -119,21 +126,41 @@ Eigen::Vector3d Contact::getNormalVector(const Eigen::Vector3d contact_pos)
 	{
 		const auto* box = static_cast<const BoxShape*>(obj_shape);
 		Eigen::Vector3d size = box->getSize();
+		if(false) //Vertex
+		{
+
+		}
+		else if(false) //Edge
+		{
+
+		}
+		else //Face
+		{
+			if(contact_pos[0] == size[0]/2 || contact_pos[0] == -size[0]/2)
+				normal = (Eigen::Vector3d(0,0,0) - Eigen::Vector3d(contact_pos[0],0,0)).normalized();
+			else if(contact_pos[1] == size[1]/2 || contact_pos[1] == -size[1]/2)
+				normal = (Eigen::Vector3d(0,0,0) - Eigen::Vector3d(0,contact_pos[1],0)).normalized();
+			else if(contact_pos[2] == size[2]/2 || contact_pos[2] == -size[2]/2)
+				normal = (Eigen::Vector3d(0,0,0) - Eigen::Vector3d(0,0,contact_pos[2])).normalized();
+		}
+
 
 	}
 	else if(obj_shape->is<SphereShape>())
 	{
-		normal = Eigen::Vector3d(0,0,0) - contact_pos;
+		normal = (Eigen::Vector3d(0,0,0) - contact_pos).normalized();
 	}
 	else if(obj_shape->is<EllipsoidShape>())
 	{
 		const auto* ellipsoid = static_cast<const EllipsoidShape*>(obj_shape);
+		//Have to implement
 	}
 	else
-	{
-
+	{	
+		//Tetrahedral Cases
+		//Cross product and choose shorter one compare to left vertex
 	}
-
+	normal.normalize();
 	return normal;
 }
 
@@ -148,13 +175,44 @@ void Contact::computeGraspMap(singleContact& currentContact)
 	adjointT.block(0, 3, 3, 3) = Eigen::Matrix3d::Zero();
 	adjointT.block(3, 0, 3, 3) = skew_translate * rotation;
 	adjointT.block(3, 3, 3, 3) = rotation;
-	// std::cout << adjointT << std::endl;
 	G_map = adjointT * currentContact.wrenchBasis;
-	std::cout << "Grasp map is : " << std::endl;
-	std::cout << G_map << std::endl;
+	// std::cout << "Grasp map is : " << std::endl;
+	// std::cout << G_map << std::endl;
 	currentContact.graspMap = G_map;
 
+	// std::cout << "original " <<std::endl;
+	// std::cout << rotation << std::endl;
+	// std::cout << "to vector" << std::endl;
+	// std::cout << dart::math::logMap(rotation) <<std::endl;
+	// std::cout << "to vec to rot" <<std::endl;
+	// std::cout << dart::math::expMapRot(dart::math::logMap(rotation)) << std::endl;
 }
+
+void Contact::computeHandJacobian(singleContact& currentContact){
+	dart::dynamics::Frame *hand_frame = mHand->getBodyNode("palm");
+	BodyNode* palm_node = mHand->getBodyNode("palm");
+	Eigen::MatrixXd Jh;
+	Eigen::Matrix6d Ad_gpc_inv;
+	Eigen::MatrixXd Js_pf;
+	Eigen::Matrix3d rotation_pc = currentContact.g_po.block(0,1,3,3) * currentContact.g_oc.block(0,1,3,3);
+	Eigen::Vector3d trans_pc = currentContact.g_po.col(0) + currentContact.g_po.block(0,1,3,3) * currentContact.g_oc.col(0);
+	Eigen::Matrix3d skew_trans_pc = dart::math::makeSkewSymmetric(trans_pc);
+	BodyNode* bn = mHand->getBodyNode(currentContact.contactEndEffector);
+
+	Ad_gpc_inv.block(0, 0, 3, 3) = rotation_pc.transpose();
+	Ad_gpc_inv.block(0, 3, 3, 3) = -rotation_pc.transpose() * skew_trans_pc;
+	Ad_gpc_inv.block(3, 0, 3, 3) = Eigen::Matrix3d::Zero();
+	Ad_gpc_inv.block(3, 3, 3, 3) = rotation_pc.transpose();
+
+	//Asume palm as spatial coordinate(Not moving)
+	Js_pf = mHand->getJacobian(bn, palm_node, hand_frame);
+	Jh = currentContact.wrenchBasis.transpose() * Ad_gpc_inv * Js_pf;
+	currentContact.JacobianHand = Jh;
+	// std::cout << "Hand Jacobian is" <<std::endl;
+	// std::cout << Jh.transpose() <<std::endl;
+	// std::cout << Jh * mHand->getVelocities() << std::endl;
+}
+
 
 Eigen::Matrix3d Contact::normal2Frame(const Eigen::Vector3d norm)
 {
@@ -176,4 +234,19 @@ Eigen::Matrix3d Contact::normal2Frame(const Eigen::Vector3d norm)
 	frame.col(1) = tangentY;
 	frame.col(2) = normal;
 	return frame;
+}
+
+singleContact Contact::getContactById(std::string id){
+	singleContact temp;
+
+	for(int i =0 ; i < mContacts.size(); ++i)
+	{
+		if(mContacts[i].cId == id)
+		{
+			temp = mContacts[i];
+			break;
+		}
+	}
+
+	return temp;
 }

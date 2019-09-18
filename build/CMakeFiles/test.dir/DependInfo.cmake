@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/mrl/Test/Grasping/Contact.cpp" "/home/mrl/Test/Grasping/build/CMakeFiles/test.dir/Contact.cpp.o"
   "/home/mrl/Test/Grasping/Controller.cpp" "/home/mrl/Test/Grasping/build/CMakeFiles/test.dir/Controller.cpp.o"
+  "/home/mrl/Test/Grasping/Grasp.cpp" "/home/mrl/Test/Grasping/build/CMakeFiles/test.dir/Grasp.cpp.o"
   "/home/mrl/Test/Grasping/HandMaker.cpp" "/home/mrl/Test/Grasping/build/CMakeFiles/test.dir/HandMaker.cpp.o"
   "/home/mrl/Test/Grasping/IkSolver.cpp" "/home/mrl/Test/Grasping/build/CMakeFiles/test.dir/IkSolver.cpp.o"
   "/home/mrl/Test/Grasping/MyWindow.cpp" "/home/mrl/Test/Grasping/build/CMakeFiles/test.dir/MyWindow.cpp.o"
@@ -23,7 +24,7 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/usr/include/eigen3"
+  "/usr/local/include/eigen3"
   "/usr/include/bullet"
   "/usr/include/coin"
   )
